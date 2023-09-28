@@ -9,11 +9,21 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     @sort_based_on = params[:sort]
+
     if params[:ratings]
       @ratings_to_show = params[:ratings].keys
     else
       @ratings_to_show = []
     end
+
+    @ratings_to_show_map = @ratings_to_show.map { |value| [value, "1"] }.to_h
+
+    if @sort_based_on=="title"
+      @highlight_setting_title = 'bg-warning hilite'
+    elsif @sort_based_on=="release_date"
+      @highlight_setting_release_date = 'bg-warning hilite'
+    end
+
     @movies = Movie.with_ratings(@ratings_to_show).order(@sort_based_on)
   end
 
