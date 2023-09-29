@@ -13,7 +13,7 @@ class MoviesController < ApplicationController
     if params[:ratings]
       @ratings_to_show = params[:ratings].keys
     else
-      @ratings_to_show = []
+      @ratings_to_show = @all_ratings
     end
   
     if (!params.has_key?(:ratings) && session.has_key?(:ratings_to_show_map) && !params.has_key?(:sort) && session.has_key?(:sort_based_on) && !params[:commit])
