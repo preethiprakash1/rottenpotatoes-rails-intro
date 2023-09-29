@@ -15,15 +15,31 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = []
     end
+  
+    if (!params.has_key?(:ratings) && session.has_key?(:ratings_to_show_map) && !params.has_key?(:sort) && session.has_key?(:sort_based_on) && !params[:commit])
+      redirect_to movies_path(:sort => session[:sort_based_on], :ratings => session[:ratings_to_show_map]) and return
+    end
 
+    if ((!params.has_key?(:ratings) && session.has_key?(:ratings_to_show_map)) && (!params.has_key?(:sort) && !session.has_key?(:sort_based_on)) && !params[:commit])
+      redirect_to movies_path(:sort => "", :ratings => session[:ratings_to_show_map]) and return
+    end
+
+    if ((!params.has_key?(:ratings) && !session.has_key?(:ratings_to_show_map)) && (!params.has_key?(:sort) && session.has_key?(:sort_based_on)))
+      redirect_to movies_path(:sort => session[:sort_based_on], :ratings => @all_ratings) and return
+    end
+
+    session[:sort_based_on] = @sort_based_on
     @ratings_to_show_map = @ratings_to_show.map { |value| [value, "1"] }.to_h
+    session[:ratings] = params[:ratings]
+    session[:ratings_to_show_map] = @ratings_to_show_map
+    
 
     if @sort_based_on=="title"
       @highlight_setting_title = 'bg-warning hilite'
     elsif @sort_based_on=="release_date"
       @highlight_setting_release_date = 'bg-warning hilite'
     end
-
+ 
     @movies = Movie.with_ratings(@ratings_to_show).order(@sort_based_on)
   end
 
