@@ -15,9 +15,9 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th class= "<%= @highlight_setting_title %>"><%= link_to "Movie Title", movies_path(:sort => "title", :ratings => @ratings_to_show_map), :id => 'title_header' %> </th>
+      <th><%= link_to "Movie Title", :sort_based_on => "title", :ratings => @ratings_to_show.map { |value| [value, 1] }.to_h %> </th>
       <th> Rating </th>
-      <th class= "<%= @highlight_setting_release_date %>"><%= link_to "Release Date", movies_path(:sort => "release_date", :ratings => @ratings_to_show_map), :id => 'release_date_header' %> </th>
+      <th><%= link_to "Release Date", :sort_based_on => "release_date"%> </th>
       <th> More Info </th>
     </tr>
   </thead>
